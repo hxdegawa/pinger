@@ -6,15 +6,15 @@ cron.schedule('*/1 * * * * *', () => {
     const msg = isAlive ? 'host ' + "8.8.8.8" + ' is alive' : 'host ' + "8.8.8.8" + ' is dead';
     console.log(msg);
     if (!isAlive) {
-      const rapidCheck = cron.schedule("*/0.1 * * * * *", () => {
+      const rapidCheck = setInterval(() => {
         ping.sys.probe("8.8.8.8", function(liveChecked) {
           console.log(liveChecked);
         });
-      });
+      }, 100);
 
-      setTImeout(() => {
-        rapidCheck.destroy();
-      }, 1000)
+      setTimeout(() => {
+        clearInterval(rapidCheck);
+      }, 1000);
     };
   });
 });
